@@ -1,0 +1,4 @@
+﻿Máquina: CLIENT
+Interface ativa: enp0s3
+Endereçamento IP (LAN): 10.0.2.101/24
+Função: Estação cliente utilizada para testes de conectividade e acesso aos serviços.

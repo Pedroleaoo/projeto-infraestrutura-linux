@@ -1,0 +1,8 @@
+﻿# Ambientes e Segredos
+.env
+*.log
+.DS_Store
+
+# Certificados SSL privados reais
+*.key
+*.pem
