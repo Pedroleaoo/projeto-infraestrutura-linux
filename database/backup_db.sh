@@ -14,12 +14,12 @@ else
     BACKUP_DIR=""
 fi
 
-TIMESTAMP=
-BACKUP_FILE="/db_backup_.sql"
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+BACKUP_FILE="$BACKUP_DIR/db_backup_$TIMESTAMP.sql"
 
-echo "[*] A iniciar o backup da base de dados ..."
-mkdir -p ""
+echo "[*] A iniciar o backup da base de dados $DB_NAME..."
+mkdir -p "$BACKUP_DIR"
 
 # Executar pg_dump para gerar o dump da base de dados com segurança
-pg_dump -U "" -d "" -F c -b -v -f ""
-echo "[+] Backup concluído com sucesso em "
+pg_dump -U "$DB_USER" -d "$DB_NAME" -F c -b -v -f "$BACKUP_FILE"
+echo "[+] Backup concluído com sucesso em $BACKUP_FILE"
