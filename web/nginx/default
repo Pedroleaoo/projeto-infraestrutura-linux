@@ -1,26 +1,17 @@
-﻿server {
-    listen 80;
-    server_name 10.0.1.10;
-    return 301 https://$host$request_uri;
-}
-
+﻿# ==============================================================================
+# Configuração do Servidor Web Nginx (Virtual Host padrão)
+# ==============================================================================
 server {
-    listen 443 ssl;
-    server_name 10.0.1.10;
+    # Porta de escuta para tráfego HTTP padrão
+    listen 80;
+    server_name web.empresa.local;
 
-    ssl_certificate /etc/nginx/ssl/nginx-selfsigned.crt;
-    ssl_certificate_key /etc/nginx/ssl/nginx-selfsigned.key;
-
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
-
+    # Diretório raiz dos ficheiros web da aplicação
     root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
+    index index.html index.htm app.py;
 
+    # Bloco de localização e tratamento de pedidos
     location / {
-        proxy_pass http://127.0.0.1:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        limit_req zone=geral burst=20 nodelay;
+        try_files $uri $uri/ =404;
     }
 }

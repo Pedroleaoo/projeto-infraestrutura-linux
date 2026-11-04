@@ -1,24 +1,20 @@
-﻿*filter
-:INPUT DROP [192:51679]
-:FORWARD DROP [7137:431514]
-:OUTPUT ACCEPT [376:23383]
--A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -J ACCEPT
--A INPUT -i lo -J ACCEPT
--A INPUT -i enp0s9 -p tcp -m tcp --dport 22 -J ACCEPT
--A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -J ACCEPT
--A FORWARD -i enp0s3 -o enp0s8 -p tcp -m tcp --dport 80 -J ACCEPT
--A FORWARD -i enp0s3 -o enp0s8 -p tcp -m tcp --dport 443 -J ACCEPT
--A FORWARD -i enp0s8 -o enp0s10 -p tcp -m tcp --dport 5432 -J ACCEPT
--A FORWARD -i enp0s8 -o enp0s10 -J DROP
--A FORWARD -i enp0s3 -o enp0s10 -J DROP
--A FORWARD -i enp0s9 -o enp0s9 -p tcp -m tcp --dport 139 -J ACCEPT
--A FORWARD -i enp0s9 -o enp0s9 -p tcp -m tcp --dport 445 -J ACCEPT
--A FORWARD -i enp0s10 -o enp0s9 -p tcp -m tcp --dport 445 -J ACCEPT
--A FORWARD -i enp0s9 -p tcp -m tcp --dport 22 -J ACCEPT
-COMMIT
-*nat
-:PREROUTING ACCEPT [7331:484345]
-:INPUT ACCEPT [0:0]
-:OUTPUT ACCEPT [82:5600]
-:POSTROUTING ACCEPT [82:5600]
+﻿# ==============================================================================
+# Regras de Firewall IPTables para o Roteador/Firewall
+# ==============================================================================
+*filter
+:INPUT DROP [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# Permitir tráfego loopback local
+-A INPUT -i lo -j ACCEPT
+
+# Permitir conexões já estabelecidas ou relacionadas
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Permitir serviços essenciais na rede interna (DNS/DHCP via Dnsmasq)
+-A INPUT -p udp --dport 53 -j ACCEPT
+-A INPUT -p tcp --dport 53 -j ACCEPT
+-A INPUT -p udp --dport 67:68 -j ACCEPT
+
 COMMIT

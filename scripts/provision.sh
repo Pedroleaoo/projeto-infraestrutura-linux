@@ -1,45 +1,37 @@
 ﻿#!/usr/bin/env bash
 # ==============================================================================
-# Script de Provisionamento e Configuração do Laboratório de Infraestrutura
-# Foco: Firewall (Netplan/Dnsmasq) e Servidor de Arquivos (Samba)
+# Script de Provisionamento Completo do Ambiente de Infraestrutura
 # ==============================================================================
-
 set -Eeuo pipefail
 
-echo "[+] A iniciar o provisionamento do ambiente..."
+echo "[+] A iniciar o provisionamento completo dos serviços nas VMs..."
 
-# 1. Configuração de Redes e Netplan (Firewall)
-if [ -d "firewall/netplan" ]; then
-    echo "[*] A aplicar configurações do Netplan..."
+# 1. Instalação e atualização dos pacotes essenciais
+sudo apt-get update
+sudo apt-get install -y netplan.io dnsmasq samba postgresql nginx python3
+
+# 2. Aplicar configurações de rede (Netplan)
+if [ -f "firewall/netplan/01-lab.yaml" ]; then
     sudo cp firewall/netplan/01-lab.yaml /etc/netplan/01-lab.yaml
     sudo netplan apply
 fi
 
-# 2. Configuração do Dnsmasq (DNS/DHCP)
+# 3. Configurar Dnsmasq
 if [ -f "firewall/dnsmasq/lab.conf" ]; then
-    echo "[*] A configurar o Dnsmasq..."
     sudo cp firewall/dnsmasq/lab.conf /etc/dnsmasq.d/lab.conf
     sudo systemctl restart dnsmasq
 fi
 
-# 3. Configuração do Servidor de Arquivos (Samba e Estruturas de Pastas)
+# 4. Configurar Samba
 if [ -f "files/samba/smb.conf" ]; then
-    echo "[*] A configurar o Samba e diretórios compartilhados..."
     sudo cp files/samba/smb.conf /etc/samba/smb.conf
-    
-    # Criar diretórios reais mapeados no laboratório
-    sudo mkdir -p /compartilhado/publico
-    sudo mkdir -p /compartilhado/projetos
-    sudo mkdir -p /compartilhado/backups
-
-    # Definir permissões de segurança por grupos
-    sudo chmod 777 /compartilhado/publico
-    sudo chown -R root:devs /compartilhado/projetos
-    sudo chmod 770 /compartilhado/projetos
-    sudo chown -R root:backup_mgr /compartilhado/backups
-    sudo chmod 770 /compartilhado/backups
-
     sudo systemctl restart smbd
 fi
 
-echo "[+] Provisionamento concluído com sucesso!"
+# 5. Configurar Nginx
+if [ -f "web/nginx/default" ]; then
+    sudo cp web/nginx/default /etc/nginx/sites-available/default
+    sudo systemctl restart nginx
+fi
+
+echo "[+] Provisionamento concluído com 100% de sucesso!"
