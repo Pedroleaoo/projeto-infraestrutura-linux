@@ -2,11 +2,15 @@
   version: 2
   renderer: networkd
   ethernets:
+    # Interface WAN (Conexão externa / NAT com DHCP)
     enp0s3:
       dhcp4: true
+    # Interface da Rede DMZ / Segmento 1
     enp0s8:
       addresses: [10.0.1.1/24]
+    # Interface da Rede LAN (Clientes e Servidores internos)
     enp0s9:
       addresses: [10.0.2.1/24]
+    # Interface da Rede do Banco de Dados
     enp0s10:
       addresses: [10.0.3.1/24]
