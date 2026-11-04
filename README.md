@@ -7,8 +7,7 @@ Repositório oficial para a gestão, documentação e provisionamento da infraes
 - **files/**: Configuração do Servidor de Arquivos Samba com partições restritas por grupos.
 - **database/**: Configuração do PostgreSQL (pg_hba.conf) e rotinas de backup (ackup_db.sh).
 - **web/**: Configurações do servidor web Nginx.
-- **app/**: Código da aplicação (pp.py).
 - **scripts/**: Script automatizado (provision.sh) para o provisionamento completo dos serviços.
 
 ## ⚙️ Provisionamento
-O script scripts/provision.sh instala e configura automaticamente todos os serviços necessários nas máquinas virtuais do laboratório.
+O script scripts/provision.sh instala e configura automaticamente todos os serviços necessários nas máquinas virtuais do laboratório (focado em ambientes de VMs pré-existentes).
